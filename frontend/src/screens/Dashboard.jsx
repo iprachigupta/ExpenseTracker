@@ -1,4 +1,4 @@
-import Profile from "../components/Profile";
+import DashboardProfile from "../components/DashboardProfile";
 import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
 import { handleError, handleSuccess } from "../utils/toast";
@@ -19,7 +19,7 @@ function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/auth/dashboard", {
+      const response = await fetch("http://localhost:8080/api/dashboard", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ function Dashboard() {
         </div>
 
         <div className="w-full md:w-3/4">
-          <Profile
+          <DashboardProfile
             data={data}
             setData={setData}
             fetchDashboardData={fetchDashboardData}

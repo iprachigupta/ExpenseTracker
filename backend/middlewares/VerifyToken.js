@@ -29,7 +29,7 @@ const verifyToken = (req, res, next) => {
         maxAge: 5 * 60 * 1000
       });
       
-      req.user = user;
+      req.user = { id: user.id, email: user.email };
       next();
     });
   } else {
@@ -39,7 +39,7 @@ const verifyToken = (req, res, next) => {
         return res.status(403).json({ message: "Invalid Access Token.", success: false });
       }
 
-      req.user = user;
+      req.user = { id: user.id, email: user.email };
       next(); 
     });
   }

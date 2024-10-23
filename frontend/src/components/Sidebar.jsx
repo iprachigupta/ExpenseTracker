@@ -7,7 +7,6 @@ import SidebarItem from "./SidebarItem";
 import Logo from "./Logo";
 
 function Sidebar() {
-  // State to control sidebar visibility
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -16,7 +15,6 @@ function Sidebar() {
 
   return (
     <div>
-      {/* Hamburger Menu for small screens */}
       <div className="bg-white p-2 shadow-md fixed top-0 left-0 z-50 w-full flex justify-between items-center md:hidden">
         <Logo />
         <button onClick={toggleSidebar} className="text-3xl">
@@ -64,7 +62,6 @@ function Sidebar() {
         </ul>
       </div>
 
-      {/* Overlay to close sidebar when clicked outside */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"

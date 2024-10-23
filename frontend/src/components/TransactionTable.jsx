@@ -7,6 +7,8 @@ import { AiFillEdit } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { handleError, handleSuccess } from "../utils/toast";
 import { useNavigate } from "react-router-dom";
+import ExpenseModal from "./ExpenseModal";
+import TransactionRow from "./TransactionRow";
 
 function TransactionTable(props) {
   const {
@@ -59,6 +61,15 @@ function TransactionTable(props) {
   const [updatedData, setUpdatedData] = useState({});
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
   const navigate = useNavigate();
+  const tableHeadings = [
+    "Title",
+    "Amount",
+    "Category",
+    "Description",
+    "Type",
+    "Date",
+    "Update/Delete",
+  ];
 
   useEffect(() => {
     fetchExpenses();
@@ -304,15 +315,7 @@ function TransactionTable(props) {
         <table className="min-w-full table-auto border-collapse border border-gray-300">
           <thead>
             <tr>
-              {[
-                "Title",
-                "Amount",
-                "Category",
-                "Description",
-                "Type",
-                "Date",
-                "Update/Delete",
-              ].map((header) => (
+              {tableHeadings.map((header) => (
                 <th
                   key={header}
                   className="border px-4 py-2 text-xs md:text-sm lg:text-base"
@@ -324,40 +327,12 @@ function TransactionTable(props) {
           </thead>
           <tbody>
             {expenses.map((expense) => (
-              <tr key={expense._id}>
-                <td className="border px-4 py-2 text-xs md:text-sm">
-                  {expense.title}
-                </td>
-                <td className="border px-4 py-2 text-xs md:text-sm">
-                  {expense.amount}
-                </td>
-                <td className="border px-4 py-2 text-xs md:text-sm">
-                  {expense.category}
-                </td>
-                <td className="border px-4 py-2 text-xs md:text-sm">
-                  {expense.description}
-                </td>
-                <td className="border px-4 py-2 text-xs md:text-sm">
-                  {expense.transactionType}
-                </td>
-                <td className="border px-4 py-2 text-xs md:text-sm">
-                  {new Date(expense.date).toLocaleDateString()}
-                </td>
-                <td className="border px-4 py-2 flex justify-center space-x-2 text-xs md:text-sm">
-                  <button
-                    onClick={() => handleEditClick(expense)}
-                    className="bg-green-500 text-white hover:bg-green-700 py-1 px-3 rounded"
-                  >
-                    <AiFillEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteClick(expense._id)}
-                    className="bg-red-500 text-white hover:bg-red-700 py-1 px-2 rounded"
-                  >
-                    <MdDelete />
-                  </button>
-                </td>
-              </tr>
+              <TransactionRow
+              key={expense._id}
+              expense={expense}
+              onEditClick={handleEditClick}
+              onDeleteClick={handleDeleteClick}
+            />
             ))}
           </tbody>
         </table>
@@ -365,249 +340,29 @@ function TransactionTable(props) {
 
       {/* Add Expense Modal */}
       {showAddExpenseModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white px-5 py-6 rounded-3xl shadow-lg w-11/12 md:w-full max-w-md">
-            <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">
-              Add Transaction
-            </h2>
-
-            <label className="block text-gray-900 font-medium mb-1">
-              Title
-            </label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500 mb-2"
-            />
-
-            <div className="flex flex-col md:flex-row gap-5">
-              <div>
-                <label className="block text-gray-900 font-medium mb-1">
-                  Transaction Type
-                </label>
-                <select
-                  value={formData.transactionType}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      transactionType: e.target.value,
-                      category: "",
-                    })
-                  }
-                  className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="" disabled>
-                    Choose...
-                  </option>
-                  <option value="income">Income</option>
-                  <option value="expense">Expense</option>
-                </select>
-              </div>
-
-              {formData.transactionType && (
-                <div>
-                  <label className="block text-gray-900 font-medium mb-1">
-                    Category
-                  </label>
-                  <select
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
-                    }
-                    className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="" disabled>
-                      Choose...
-                    </option>
-                    {categories[formData.transactionType].map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
-
-            <label className="block text-gray-900 font-medium mb-1">
-              Amount
-            </label>
-            <input
-              type="number"
-              value={formData.amount}
-              onChange={(e) =>
-                setFormData({ ...formData, amount: e.target.value })
-              }
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500 mb-2"
-            />
-
-            <label className="block text-gray-900 font-medium mb-1">
-              Description
-            </label>
-            <input
-              type="text"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500 mb-2"
-            />
-
-            <label className="block text-gray-900 font-medium mb-1">Date</label>
-            <input
-              type="date"
-              value={formData.date}
-              onChange={(e) =>
-                setFormData({ ...formData, date: e.target.value })
-              }
-              max={today}
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            />
-
-            <div className="flex justify-center mt-4">
-              <button
-                onClick={addExpense}
-                className="bg-green-500 text-white hover:scale-95 px-4 py-2 rounded mr-2"
-              >
-                Add
-              </button>
-              <button
-                onClick={() => setShowAddExpenseModal(false)}
-                className="bg-gray-300 text-black hover:scale-95 px-4 py-2 rounded"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <ExpenseModal
+          title={"Add Transaction"}
+          expenseData={formData}
+          setExpenseData={setFormData}
+          saveExpense={addExpense}
+          setShowExpenseModal={setShowAddExpenseModal}
+          categories={categories}
+          today={today}
+          save={"Add"}
+        />
       )}
 
-      {/* Update Modal */}
+      {/* Update Expense Modal */}
       {showUpdateModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white px-5 py-6 rounded-3xl shadow-lg w-11/12 md:w-full max-w-md">
-            <h2 className="text-xl md:text-2xl font-bold mb-4 text-center">
-              Update Transaction
-            </h2>
-
-            <label className="block text-gray-900 font-medium mb-1">
-              Title
-            </label>
-            <input
-              type="text"
-              value={updatedData.title}
-              onChange={(e) =>
-                setUpdatedData({ ...updatedData, title: e.target.value })
-              }
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500 mb-2"
-            />
-
-            <div className="flex flex-col md:flex-row gap-5">
-              <div>
-                <label className="block text-gray-900 font-medium mb-1">
-                  Transaction Type
-                </label>
-                <select
-                  value={updatedData.transactionType}
-                  onChange={(e) =>
-                    setUpdatedData({
-                      ...updatedData,
-                      transactionType: e.target.value,
-                      category: "",
-                    })
-                  }
-                  className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="" disabled>
-                    Choose...
-                  </option>
-                  <option value="income">Income</option>
-                  <option value="expense">Expense</option>
-                </select>
-              </div>
-
-              {updatedData.transactionType && (
-                <div>
-                  <label className="block text-gray-900 font-medium mb-1">
-                    Category
-                  </label>
-                  <select
-                    value={updatedData.category}
-                    onChange={(e) =>
-                      setUpdatedData({
-                        ...updatedData,
-                        category: e.target.value,
-                      })
-                    }
-                    className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="" disabled>
-                      Choose...
-                    </option>
-                    {categories[updatedData.transactionType].map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
-
-            <label className="block text-gray-900 font-medium mb-1">
-              Amount
-            </label>
-            <input
-              type="number"
-              value={updatedData.amount}
-              onChange={(e) =>
-                setUpdatedData({ ...updatedData, amount: e.target.value })
-              }
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500 mb-2"
-            />
-
-            <label className="block text-gray-900 font-medium mb-1">
-              Description
-            </label>
-            <input
-              type="text"
-              value={updatedData.description}
-              onChange={(e) =>
-                setUpdatedData({ ...updatedData, description: e.target.value })
-              }
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500 mb-2"
-            />
-
-            <label className="block text-gray-900 font-medium mb-1">Date</label>
-            <input
-              type="date"
-              value={updatedData.date}
-              onChange={(e) =>
-                setUpdatedData({ ...updatedData, date: e.target.value })
-              }
-              max={today}
-              className="border border-gray-300 rounded-lg w-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            />
-
-            <div className="flex justify-center mt-4">
-              <button
-                onClick={handleUpdateExpense}
-                className="bg-green-500 text-white hover:scale-95 px-4 py-2 rounded mr-2"
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setShowUpdateModal(false)}
-                className="bg-gray-300 text-black hover:scale-95 px-4 py-2 rounded"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <ExpenseModal
+          title={"Update Transaction"}
+          expenseData={updatedData}
+          setExpenseData={setUpdatedData}
+          saveExpense={handleUpdateExpense}
+          setShowExpenseModal={setShowUpdateModal}
+          categories={categories}
+          save={"Update"}
+        />
       )}
 
       {/* Confirmation Dialog */}
