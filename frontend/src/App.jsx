@@ -5,9 +5,8 @@ import Dashboard from "./screens/Dashboard";
 import Transactions from "./screens/Transactions";
 import Account from "./screens/Account";
 import Logout from "./screens/Logout";
-import ChangePass from "./screens/ChangePass";
-import DeleteAccount from "./screens/DeleteAccount";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Settings from "./screens/Settings"
 
 function App() {
   return (
@@ -45,18 +44,10 @@ function App() {
             }
           />
           <Route
-            path="/change-password"
+            path="/settings"
             element={
               <ProtectedRoute>
-                <ChangePass />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/delete-account"
-            element={
-              <ProtectedRoute>
-                <DeleteAccount />
+                <Settings />
               </ProtectedRoute>
             }
           />

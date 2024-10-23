@@ -54,6 +54,13 @@ function Sidebar() {
           </li>
           <li>
             <SidebarItem
+              icon={<MdManageAccounts />}
+              title="Settings"
+              route="/settings"
+            />
+          </li>
+          <li>
+            <SidebarItem
               icon={<MdOutlineLogin />}
               title="Log out"
               route="/logout"

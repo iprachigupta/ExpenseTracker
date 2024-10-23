@@ -1,14 +1,14 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
 import AccountProfile from "../components/AccountProfile";
-import AccountSidebar from "../components/AccountSidebar";
+import Sidebar from "../components/Sidebar";
 import { ToastContainer } from "react-toastify";
 
 function Account() {
   return (
     <>
       <div className="flex flex-row justify-evenly items-center h-screen ">
-        <AccountSidebar />
+        <Sidebar />
         <AccountProfile />
       </div>
       <ToastContainer
