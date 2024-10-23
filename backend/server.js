@@ -9,6 +9,7 @@ const verifyToken = require("./middlewares/VerifyToken");
 const ExpenseRoute = require("./routes/ExpenseRoute");
 const User = require("./models/user");
 const ProfileRoute = require("./routes/ProfileRoute");
+const ChangePasswordRoute = require("./routes/ChangePasswordRoute");
 
 const corsOptions = {
   origin: "http://localhost:5173", // Allow your frontend's origin
@@ -28,7 +29,7 @@ app.use("/auth", AuthRoute);
 app.use("/api/dashboard", ProtectedRoute);
 app.use("/api/expenses", verifyToken, ExpenseRoute);
 app.use("/api/profile", verifyToken, ProfileRoute);
-
+app.use("/api/change-password", verifyToken, ChangePasswordRoute);
 
 const PORT = 8080 || process.env.PORT;
 app.listen(PORT, () => {

@@ -14,7 +14,7 @@ const TransactionRow = ({ expense, onEditClick, onDeleteClick }) => {
       <td className="border px-4 py-2 text-xs md:text-sm">{expense.transactionType}</td>
       <td className="border px-4 py-2 text-xs md:text-sm">{new Date(expense.date).toLocaleDateString()}</td>
       <td className="border px-4 py-2 text-xs md:text-sm flex space-x-2">
-        <button onClick={() => onEditClick(expense)} className="text-blue-500">
+        <button onClick={() => onEditClick(expense)} className="text-green-500">
           <AiFillEdit />
         </button>
         <button onClick={() => onDeleteClick(expense._id)} className="text-red-500">

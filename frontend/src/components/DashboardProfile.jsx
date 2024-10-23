@@ -24,7 +24,7 @@ ChartJS.register(
   Filler
 );
 
-function Profile(props) {
+function DashboardProfile(props) {
   const { data, setData } = props;
   const chartData = {
     labels: ["Income", "Expenses"],
@@ -172,4 +172,4 @@ function Profile(props) {
   );
 }
 
-export default Profile;
+export default DashboardProfile;

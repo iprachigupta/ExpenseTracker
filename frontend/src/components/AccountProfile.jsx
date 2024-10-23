@@ -86,7 +86,7 @@ const AccountProfile = () => {
 
       <div className="mt-6 bg-white p-4 rounded-lg shadow-lg">
         <ProfileItem title="Full Name" name = {profileData.name}/>
-        <ProfileItem title="Full Name" icon={<FiMail/>} name = {profileData.email}/>
+        <ProfileItem title="Email" icon={<FiMail/>} name = {profileData.email}/>
       </div>
 
       <div className="mt-6 flex justify-center">
