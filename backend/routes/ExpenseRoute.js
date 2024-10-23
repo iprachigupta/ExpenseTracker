@@ -3,24 +3,12 @@ const router = express.Router();
 const Expense = require("../models/expense");
 const verifyToken = require("../middlewares/VerifyToken");
 const User = require("../models/user");
+const {transaction} = require ("../middlewares/TransactionValidation") 
 
-router.post("/", verifyToken, async (req, res) => {
+
+router.post("/", verifyToken, transaction,  async (req, res) => {
   const { title, amount, category, description, transactionType, date } =
     req.body;
-    //TransactionValidation and TransactionController
-  if (
-    !title ||
-    !amount ||
-    !category ||
-    !description ||
-    !transactionType ||
-    !date
-  ) {
-    console.log(req.body);
-    return res
-      .status(400)
-      .json({ success: false, message: "All fields are required" });
-  }
 
   try {
     const user = await User.findById(req.user.id);
