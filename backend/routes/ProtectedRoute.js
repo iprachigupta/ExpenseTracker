@@ -4,9 +4,12 @@ const Expense = require("../models/expense");
 
 
 router.get('/', verifyToken, async (req, res) => {
+  
   try {
+    const userId = req.user.id;
+    console.log(userId);
     const income = await Expense.aggregate([
-      { $match: { transactionType: 'income' } },
+      { $match: { transactionType: 'income', userId : userId } },
       {
         $group: {
           _id: { $month: "$date" }, 
@@ -16,8 +19,9 @@ router.get('/', verifyToken, async (req, res) => {
       { $sort: { _id: 1 } } 
     ]);
 
+    console.log(income)
     const expenses = await Expense.aggregate([
-      { $match: { transactionType: 'expense' } },
+      { $match: { transactionType: 'expense', userId : userId } },
       {
         $group: {
           _id: { $month: "$date" },
@@ -42,6 +46,7 @@ router.get('/', verifyToken, async (req, res) => {
     const totalExpense = expenses.reduce((acc, curr) => acc + curr.totalExpense, 0);
     const totalOutstanding = totalIncome - totalExpense;
 
+    console.log(totalIncome, totalExpense, totalOutstanding);
     res.json({
       monthlyIncome,
       monthlyExpenses,

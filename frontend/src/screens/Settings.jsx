@@ -65,7 +65,7 @@ const Settings = () => {
 
   const handleConfirmDelete = () => {
     setShowConfirmDialog(false);
-    setShowPasswordDialog(true); 
+    setShowPasswordDialog(true);
   };
 
   const handleCancelDelete = () => {
@@ -78,18 +78,16 @@ const Settings = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:8080/api/delete-account",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            password
-          }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch("http://localhost:8080/api/delete-account", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password,
+        }),
+        credentials: "include",
+      });
 
       const data = await response.json();
 
@@ -101,24 +99,24 @@ const Settings = () => {
           navigate("/signup");
         }, 1500);
       } else {
-        handleError(data.message)
+        handleError(data.message);
       }
     } catch (err) {
-      handleError(err)
+      handleError(err);
     }
   };
 
   return (
     <>
-      <div className="flex flex-row justify-start items-center h-screen bg-gradient-to-r from-blue-200 to-purple-300">
+      <div className="flex flex-col md:flex-row justify-start items-start h-screen bg-white">
         <div>
           <Sidebar />
         </div>
-        <div className="ml-20 ">
+        <div className="md:ml-96 w-full p-6 sm:p-4 mt-24">
           <h2 className="mb-6 text-3xl font-bold">Change Password</h2>
           {error && <p className="text-red-500">{error}</p>}
           {success && <p className="text-green-500">{success}</p>}
-          <form onSubmit={handleChangePassword}>
+          <form onSubmit={handleChangePassword} className="w-full max-w-md">
             <div className="mb-4">
               <label className="block mb-2 text-md font-medium text-gray-700">
                 Current Password
@@ -165,7 +163,7 @@ const Settings = () => {
           <hr className="w-full my-8"></hr>
           <div>
             <h2 className="text-2xl font-bold text-red-600 ">
-              Want to Delete Your Account??
+              Want to Delete Your Account?
             </h2>
             <button
               onClick={handleDeleteClick}
@@ -175,7 +173,7 @@ const Settings = () => {
             </button>
             {showConfirmDialog && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                <div className="bg-white p-6 rounded shadow-md">
+                <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
                   <p className="mb-4">
                     Are you sure you want to delete your account?
                   </p>
@@ -198,7 +196,7 @@ const Settings = () => {
             )}
             {showPasswordDialog && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                <div className="bg-white p-6 rounded shadow-md">
+                <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
                   <h3 className="text-md font-bold mb-4">
                     Enter your password to delete your account . . .
                   </h3>
