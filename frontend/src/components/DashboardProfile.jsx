@@ -40,24 +40,15 @@ function DashboardProfile(props) {
   };
 
   const incomeChartData = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
+    labels: Array.from({ length: 12 }, (_, i) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() - (11 - i)); 
+      return date.toLocaleString('default', { month: 'short', year: 'numeric' });
+    }),
     datasets: [
       {
         label: "Monthly Income (₹)",
-        data: data.monthlyIncome,
+        data: data.monthlyIncome, 
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.4)",
         fill: true,
@@ -67,20 +58,11 @@ function DashboardProfile(props) {
   };
 
   const expensesChartData = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
+    labels: Array.from({ length: 12 }, (_, i) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() - (11 - i)); 
+      return date.toLocaleString('default', { month: 'short', year: 'numeric' });
+    }),
     datasets: [
       {
         label: "Monthly Expenses (₹)",
@@ -102,18 +84,6 @@ function DashboardProfile(props) {
     },
   };
 
-  const options1 = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Monthly Income Vs Expenses",
-      },
-    },
-  };
 
   return (
     <div className="flex-1 p-4 mt-24 lg:mt-0 md:p-8 h-screen absolute top-0 left-0 md:left-64 right-0">
@@ -164,7 +134,7 @@ function DashboardProfile(props) {
             ₹ {data.totalOutstanding}/-
           </p>
           <div className="bg-white p-2 mt-2 shadow-zinc-400 shadow-md ">
-            <Line data={chartData} options={options1} />
+            <Line data={ {...incomeChartData, datasets: [...incomeChartData.datasets, ...expensesChartData.datasets ]}} options={options} />
           </div>
         </div>
       </div>

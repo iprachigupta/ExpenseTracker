@@ -268,8 +268,8 @@ function TransactionTable(props) {
               className="border rounded w-full py-2 px-3"
             >
               <option value="">All</option>
-              {categories.expense.concat(categories.income).map((cat) => (
-                <option key={cat} value={cat}>
+              {categories.expense.concat(categories.income).map((cat, index) => (
+                <option key={`${cat}-${index}`} value={cat}>
                   {cat}
                 </option>
               ))}

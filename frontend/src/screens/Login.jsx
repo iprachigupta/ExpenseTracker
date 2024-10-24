@@ -9,17 +9,15 @@ import Logo from "../components/Logo";
 
 function Login() {
   const [users, setUsers] = useState({
-    email: "prachi1@gmail.com",
-    password: "Prachi@123",
+    email: "",
+    password: "",
   });
 
-
   const navigate = useNavigate();
-
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const { email, password } = users;
-    
+
     if (!email || !password) return handleError("All Fields Are Required");
 
     try {
@@ -89,6 +87,14 @@ function Login() {
                 onChange={handleChange}
                 autoComplete="off"
               />
+              {/* <h4 className="text-xs text-end mt-2">
+                <Link
+                  to="/reset-password"
+                  className="text-red-500 hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </h4> */}
             </div>
             <button
               type="submit"
