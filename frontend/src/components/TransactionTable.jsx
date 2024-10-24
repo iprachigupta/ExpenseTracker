@@ -3,10 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import { IoReorderThreeSharp } from "react-icons/io5";
-import { AiFillEdit } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
 import { handleError, handleSuccess } from "../utils/toast";
-import { useNavigate } from "react-router-dom";
 import ExpenseModal from "./ExpenseModal";
 import TransactionRow from "./TransactionRow";
 
@@ -60,7 +57,6 @@ function TransactionTable(props) {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [updatedData, setUpdatedData] = useState({});
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
-  const navigate = useNavigate();
   const tableHeadings = [
     "Title",
     "Amount",

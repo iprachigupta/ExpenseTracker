@@ -1,66 +1,56 @@
 const verifyToken = require("../middlewares/VerifyToken");
 const router = require("express").Router();
 const Expense = require("../models/expense");
-
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 router.get('/', verifyToken, async (req, res) => {
-  
   try {
-    const userId = req.user.id;
-    console.log(userId);
-    const income = await Expense.aggregate([
-      { $match: { transactionType: 'income', userId : userId } },
+    const userId = new ObjectId(req.user.id);
+    if (!userId) {
+      return res.status(400).json({ message: "User not authenticated" });
+    }
+
+    const summary = await Expense.aggregate([
+      { $match: { userId: userId } }, 
       {
         $group: {
-          _id: { $month: "$date" }, 
-          totalIncome: { $sum: "$amount" }
+          _id: { month: { $month: "$date" }, transactionType: "$transactionType" },
+          totalAmount: { $sum: "$amount" }
         }
       },
-      { $sort: { _id: 1 } } 
+      { $sort: { "_id.month": 1 } }
     ]);
 
-    console.log(income)
-    const expenses = await Expense.aggregate([
-      { $match: { transactionType: 'expense', userId : userId } },
-      {
-        $group: {
-          _id: { $month: "$date" },
-          totalExpense: { $sum: "$amount" }
-        }
-      },
-      { $sort: { _id: 1 } }
-    ]);
+    const monthlyIncome = Array(12).fill(0);
+    const monthlyExpenses = Array(12).fill(0);
 
-    const monthlyIncome = Array(12).fill(0); 
-    const monthlyExpenses = Array(12).fill(0); 
-
-    income.forEach(item => {
-      monthlyIncome[item._id - 1] = item.totalIncome;
+    summary.forEach(item => {
+      if (item._id.transactionType === 'income') {
+        monthlyIncome[item._id.month - 1] = item.totalAmount;
+      } else if (item._id.transactionType === 'expense') {
+        monthlyExpenses[item._id.month - 1] = item.totalAmount;
+      }
     });
 
-    expenses.forEach(item => {
-      monthlyExpenses[item._id - 1] = item.totalExpense;
-    });
-
-    const totalIncome = income.reduce((acc, curr) => acc + curr.totalIncome, 0);
-    const totalExpense = expenses.reduce((acc, curr) => acc + curr.totalExpense, 0);
+    const totalIncome = monthlyIncome.reduce((acc, val) => acc + val, 0);
+    const totalExpense = monthlyExpenses.reduce((acc, val) => acc + val, 0);
     const totalOutstanding = totalIncome - totalExpense;
 
-    console.log(totalIncome, totalExpense, totalOutstanding);
-    res.json({
+    res.status(200).json({
       monthlyIncome,
       monthlyExpenses,
       totalIncome,
       totalExpense,
       totalOutstanding,
-      message: "Welcome to Dashboard !!",
+      message: "Income, Expenses, and Outstanding calculated successfully!",
       success: true
     });
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Server Error', error });
   }
 });
-
 
 module.exports = router;
