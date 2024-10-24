@@ -54,6 +54,7 @@ const deleteAccount = async (req, res) => {
     }
 
     user.is_deleted = true;
+    user.status = "inactive"
     await user.save();
 
     res.clearCookie("accessToken", {

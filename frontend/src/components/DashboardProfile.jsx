@@ -26,18 +26,7 @@ ChartJS.register(
 
 function DashboardProfile(props) {
   const { data, setData } = props;
-  const chartData = {
-    labels: ["Income", "Expenses"],
-    datasets: [
-      {
-        label: "Amount (₹)",
-        data: [data.income, data.expenses],
-        backgroundColor: ["rgba(75, 192, 192, 0.4)", "rgba(255, 99, 132, 0.4)"],
-        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
-        borderWidth: 3,
-      },
-    ],
-  };
+
 
   const incomeChartData = {
     labels: Array.from({ length: 12 }, (_, i) => {

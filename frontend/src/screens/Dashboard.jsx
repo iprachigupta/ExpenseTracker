@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import DashboardProfile from "../components/DashboardProfile";
 import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
@@ -14,18 +13,13 @@ function Dashboard() {
     totalOutstanding: 0,
   });
 
-  const [dateRange, setDateRange] = useState({
-    startDate: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-    endDate: new Date(),
-  });
-
   useEffect(() => {
     fetchDashboardData();
-  }, [dateRange]);
+  }, []);
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/dashboard?startDate=${dateRange.startDate.toISOString()}&endDate=${dateRange.endDate.toISOString()}`, {
+      const response = await fetch("http://localhost:8080/api/dashboard", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

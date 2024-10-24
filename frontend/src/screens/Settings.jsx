@@ -112,7 +112,7 @@ const Settings = () => {
         <div>
           <Sidebar />
         </div>
-        <div className="md:ml-96 w-full p-6 sm:p-4 mt-24">
+        <div className="md:ml-52 w-full p-6 sm:p-4 mt-24 md:mt-12">
           <h2 className="mb-6 text-3xl font-bold">Change Password</h2>
           {error && <p className="text-red-500">{error}</p>}
           {success && <p className="text-green-500">{success}</p>}
@@ -160,9 +160,8 @@ const Settings = () => {
               Change Password
             </button>
           </form>
-          <hr className="w-full my-8"></hr>
           <div>
-            <h2 className="text-2xl font-bold text-red-600 ">
+            <h2 className="mt-12 text-2xl font-bold text-black ">
               Want to Delete Your Account?
             </h2>
             <button
