@@ -26,14 +26,14 @@ ChartJS.register(
 
 function DashboardProfile(props) {
   const { data, setData } = props;
-
+  const labels = Array.from({ length: 12 }, (_, i) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - (11 - i));
+    return date.toLocaleString("default", { month: "short", year: "numeric" });
+  });
 
   const incomeChartData = {
-    labels: Array.from({ length: 12 }, (_, i) => {
-      const date = new Date();
-      date.setMonth(date.getMonth() - (11 - i)); 
-      return date.toLocaleString('default', { month: 'short', year: 'numeric' });
-    }),
+    labels,
     datasets: [
       {
         label: "Monthly Income (₹)",
@@ -47,11 +47,7 @@ function DashboardProfile(props) {
   };
 
   const expensesChartData = {
-    labels: Array.from({ length: 12 }, (_, i) => {
-      const date = new Date();
-      date.setMonth(date.getMonth() - (11 - i)); 
-      return date.toLocaleString('default', { month: 'short', year: 'numeric' });
-    }),
+    labels,
     datasets: [
       {
         label: "Monthly Expenses (₹)",

@@ -3,6 +3,7 @@ const router = require("express").Router();
 const Expense = require("../models/expense");
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const moment = require('moment');
 
 router.get('/', verifyToken, async (req, res) => {
   try {
@@ -11,25 +12,22 @@ router.get('/', verifyToken, async (req, res) => {
       return res.status(400).json({ message: "User not authenticated" });
     }
 
-    const summary = await Expense.aggregate([
-      { $match: { userId: userId } }, 
-      {
-        $group: {
-          _id: { month: { $month: "$date" }, transactionType: "$transactionType" },
-          totalAmount: { $sum: "$amount" }
-        }
-      },
-      { $sort: { "_id.month": 1 } }
-    ]);
-
+    const currentMonth = moment().startOf("month");
     const monthlyIncome = Array(12).fill(0);
     const monthlyExpenses = Array(12).fill(0);
 
-    summary.forEach(item => {
-      if (item._id.transactionType === 'income') {
-        monthlyIncome[item._id.month - 1] = item.totalAmount;
-      } else if (item._id.transactionType === 'expense') {
-        monthlyExpenses[item._id.month - 1] = item.totalAmount;
+    const lastYearExpenses = await Expense.find({
+      userId,
+      date: { $gte: moment(currentMonth).subtract(11, "months").toDate() },
+    });
+
+    lastYearExpenses.forEach((expense) => {
+      const monthIndex = 11 - moment(currentMonth).diff(moment(expense.date), "months");
+
+      if (expense.transactionType === "income") {
+        monthlyIncome[monthIndex] += expense.amount;
+      } else if (expense.transactionType === "expense") {
+        monthlyExpenses[monthIndex] += expense.amount;
       }
     });
 
@@ -43,7 +41,6 @@ router.get('/', verifyToken, async (req, res) => {
       totalIncome,
       totalExpense,
       totalOutstanding,
-      message: "Income, Expenses, and Outstanding calculated successfully!",
       success: true
     });
 
