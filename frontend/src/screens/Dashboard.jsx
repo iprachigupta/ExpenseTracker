@@ -19,7 +19,7 @@ function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/dashboard", {
+      const response = await fetch("http://localhost:8080/api/user/dashboard", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

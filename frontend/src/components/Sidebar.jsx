@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { GrTransaction } from "react-icons/gr";
 import { MdManageAccounts, MdOutlineLogin, MdDashboard } from "react-icons/md";
+import { MdOutlineSettings } from "react-icons/md";
 import { FiMenu } from "react-icons/fi";
 import SidebarItem from "./SidebarItem";
 import Logo from "./Logo";
@@ -54,7 +55,7 @@ function Sidebar() {
           </li>
           <li>
             <SidebarItem
-              icon={<MdManageAccounts />}
+              icon={<MdOutlineSettings />}
               title="Settings"
               route="/settings"
             />

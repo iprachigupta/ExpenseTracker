@@ -31,7 +31,7 @@ const Settings = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/change-password",
+        "http://localhost:8080/api/user/change-password",
         {
           method: "POST",
           headers: {
@@ -78,7 +78,7 @@ const Settings = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:8080/api/delete-account", {
+      const response = await fetch("http://localhost:8080/api/user/delete-account", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

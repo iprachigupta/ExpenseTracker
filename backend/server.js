@@ -25,10 +25,10 @@ app.use(body_parser.json()); //can use app.use(express.json()) instead of body p
 app.use(cookieParser());
 
 app.use("/auth", AuthRoute);
-app.use("/api/dashboard", ProtectedRoute);
-app.use("/api/expenses", verifyToken, TransactionRoute);
-app.use("/api/profile", verifyToken, ProfileRoute);
-app.use("/api", verifyToken, SettingsRoute);
+app.use("/api/user/dashboard", ProtectedRoute);
+app.use("/api/user/expenses", verifyToken, TransactionRoute);
+app.use("/api/user/profile", verifyToken, ProfileRoute);
+app.use("/api/user", verifyToken, SettingsRoute);
 
 const PORT = 8080 || process.env.PORT;
 app.listen(PORT, () => {

@@ -35,7 +35,7 @@ function Expense() {
       queryParams.append("transactionType", filterTransactionType);
     try {
       const response = await fetch(
-        `http://localhost:8080/api/expenses?${queryParams.toString()}`,
+        `http://localhost:8080/api/user/expenses?${queryParams.toString()}`,
         {
           method: "GET",
           headers: {

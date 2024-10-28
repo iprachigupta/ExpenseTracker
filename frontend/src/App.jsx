@@ -7,7 +7,6 @@ import Account from "./screens/Account";
 import Logout from "./screens/Logout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Settings from "./screens/Settings"
-// import { ToastContainer } from "react-toastify";
 
 function App() {
   return (

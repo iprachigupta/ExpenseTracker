@@ -19,7 +19,7 @@ const AccountProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/profile", {
+        const response = await fetch("http://localhost:8080/api/user/profile", {
           method: "GET",
           credentials: "include",
         });
@@ -50,7 +50,7 @@ const AccountProfile = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/profile", {
+      const response = await fetch("http://localhost:8080/api/user/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -74,7 +74,7 @@ function TransactionTable(props) {
   const deleteExpense = async (expenseId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/expenses/delete/${expenseId}`,
+        `http://localhost:8080/api/user/expenses/delete/${expenseId}`,
         {
           method: "DELETE",
           headers: {
@@ -144,7 +144,7 @@ function TransactionTable(props) {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/expenses", {
+      const response = await fetch("http://localhost:8080/api/user/expenses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -178,7 +178,7 @@ function TransactionTable(props) {
   const handleUpdateExpense = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/expenses/update/${editExpenseId}`,
+        `http://localhost:8080/api/user/expenses/update/${editExpenseId}`,
         {
           method: "PUT",
           headers: {
