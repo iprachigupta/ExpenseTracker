@@ -9,6 +9,7 @@ const ProtectedRoute = require("./routes/ProtectedRoute");
 const TransactionRoute = require('./routes/TransactionRoute');
 const ProfileRoute = require("./routes/ProfileRoute");
 const SettingsRoute = require("./routes/SettingsRoute");
+const CategoryRoute = require("./routes/CategoryRoute");
 
 const verifyToken = require("./middlewares/VerifyToken");
 
@@ -24,16 +25,13 @@ app.use(cors(corsOptions));
 app.use(body_parser.json()); //can use app.use(express.json()) instead of body parser
 app.use(cookieParser());
 
-// app.use((req, res, next) => {
-//   console.log(`Received ${req.method} request at ${req.originalUrl}`);
-//   next();
-// });
 
 app.use("/auth", AuthRoute);
 app.use("/api/user/dashboard", ProtectedRoute);
 app.use("/api/user/expenses", verifyToken, TransactionRoute);
 app.use("/api/user/profile", verifyToken, ProfileRoute);
 app.use("/api/user", verifyToken, SettingsRoute);
+app.use("/api/categories", verifyToken, CategoryRoute)
 
 const PORT = 8080 || process.env.PORT;
 app.listen(PORT, () => {
