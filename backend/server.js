@@ -24,6 +24,11 @@ app.use(cors(corsOptions));
 app.use(body_parser.json()); //can use app.use(express.json()) instead of body parser
 app.use(cookieParser());
 
+// app.use((req, res, next) => {
+//   console.log(`Received ${req.method} request at ${req.originalUrl}`);
+//   next();
+// });
+
 app.use("/auth", AuthRoute);
 app.use("/api/user/dashboard", ProtectedRoute);
 app.use("/api/user/expenses", verifyToken, TransactionRoute);

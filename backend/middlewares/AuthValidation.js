@@ -36,8 +36,19 @@ const signupSchema = joi.object({
     "any.only": "Passwords must match.",
     "string.empty": "Confirm password is required.",
   }),
-});
+  role: joi.string().valid("user", "admin").required().messages({
+    "string.empty": "Role is required.",
+    "any.only": "Role must be either 'user' or 'admin'.",
+  }),
 
+  secretKey: joi.string().when("role", {
+    is: "admin",
+    then: joi.required().messages({
+      "string.empty": "Secret key is required for admin.",
+    }),
+    otherwise: joi.forbidden(), 
+  }),
+});
 
 //login schema
 const loginSchema = joi.object({
@@ -51,7 +62,6 @@ const loginSchema = joi.object({
     "string.empty": "Password is required.",
   }),
 });
-
 
 const signupValidation = validateRequest(signupSchema);
 const loginValidation = validateRequest(loginSchema);

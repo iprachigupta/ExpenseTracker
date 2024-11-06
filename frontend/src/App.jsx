@@ -7,6 +7,11 @@ import Account from "./screens/Account";
 import Logout from "./screens/Logout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Settings from "./screens/Settings"
+import AdminDashboard from "./screens/AdminDashboard";
+import UsersManage from "./screens/UsersManage";
+import CategoryManage from "./screens/CategoryManage";
+import AdminAccount from "./screens/AdminAccount";
+
 
 function App() {
   return (
@@ -24,6 +29,38 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/category-manage"
+            element={
+              <ProtectedRoute>
+                <CategoryManage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/users-manage"
+            element={
+              <ProtectedRoute>
+                <UsersManage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/account"
+            element={
+              <ProtectedRoute>
+                <AdminAccount />
               </ProtectedRoute>
             }
           />
