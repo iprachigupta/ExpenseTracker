@@ -5,7 +5,7 @@ import { handleError, handleSuccess } from "../utils/toast";
 import ExpenseModal from "./ExpenseModal";
 import TransactionRow from "./TransactionRow";
 import { FaFilter } from "react-icons/fa";
-
+import ConfirmationModal from "./ConfirmationModal";
 
 function TransactionTable(props) {
   const {
@@ -37,7 +37,7 @@ function TransactionTable(props) {
   const [updatedData, setUpdatedData] = useState({});
   const [categories, setCategories] = useState({ income: [], expense: [] });
   const [transactionType, setTransactionType] = useState("");
-
+  const [showExportModal, setShowExportModal] = useState(false);
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
   const tableHeadings = [
     "Title",
@@ -233,6 +233,18 @@ function TransactionTable(props) {
     setFilters({ ...filters, filterTransactionType: e.target.value });
   };
 
+  const handleExportClick = (e) => {
+    setShowExportModal(true);
+  };
+
+  const handleConfirmExport = (e) => {
+    //export ho jayegi pdf and mesgae toast ho jayega
+  };
+
+  const handleCancelExport = (e) => {
+    setShowExportModal(false);
+  };
+
   return (
     <div className="p-4">
       <div className="flex flex-row md:flex-row justify-between items-center mt-6 mb-4">
@@ -255,13 +267,22 @@ function TransactionTable(props) {
             <FaFilter />
           </span>
           <button
-            // onClick={handleAddClick}
-            className=" bg-blue-500 text-white hover:bg-blue-700 hover:scale-110 px-2 py-1 md:px-3 md:py-2 border-2 rounded text-sm md:text-base"
+            onClick={handleExportClick}
+            className=" bg-green-500 text-white hover:bg-green-700 hover:scale-110 px-2 py-1 md:px-3 md:py-2 border-2 rounded text-sm md:text-base"
           >
             Export
           </button>
         </div>
       </div>
+
+      {showExportModal && (
+        <ConfirmationModal
+          title={"Confirm Export :"}
+          ask={"Are you sure you want to export this transaction? "}
+          handleConfirm={handleConfirmExport}
+          handleCancel={handleCancelExport}
+        />
+      )}
 
       {/* Filters */}
       {showFilters && (
@@ -270,14 +291,12 @@ function TransactionTable(props) {
             <label className="block text-gray-900">Month</label>
             <input
               type="month"
-              
               value={filters.filterMonth}
               onChange={(e) =>
                 setFilters({ ...filters, filterMonth: e.target.value })
               }
               className="border rounded w-full py-2 px-3"
             />
-            
           </div>
 
           <div>
@@ -323,7 +342,7 @@ function TransactionTable(props) {
           <div className="text-center">
             <button
               onClick={resetFilters}
-              className="mt-6 bg-blue-300 hover:bg-blue-400 text-black p-2 rounded-lg w-full"
+              className="mt-6 bg-red-500 hover:bg-red-700 text-white p-2 rounded-lg w-full"
             >
               Reset Filters
             </button>
@@ -388,30 +407,12 @@ function TransactionTable(props) {
 
       {/* Confirmation Dialog */}
       {confirmDeleteId && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 md:p-5 rounded shadow-lg w-11/12 md:w-full max-w-md">
-            <h2 className="text-lg md:text-xl font-bold mb-4">
-              Confirm Deletion
-            </h2>
-            <p className="text-sm md:text-base">
-              Are you sure you want to delete this expense?
-            </p>
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={handleConfirmDelete}
-                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
-              >
-                Confirm
-              </button>
-              <button
-                onClick={handleCancelDelete}
-                className="bg-gray-300 text-black px-4 py-2 rounded"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <ConfirmationModal
+          title={"Confirm Delete :"}
+          ask={"Are you sure you want to delete this transaction? "}
+          handleConfirm={handleConfirmDelete}
+          handleCancel={handleCancelDelete}
+        />
       )}
     </div>
   );
