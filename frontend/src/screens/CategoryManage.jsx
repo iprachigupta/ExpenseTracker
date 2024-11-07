@@ -11,7 +11,7 @@ function AdminDashboard() {
           <AdminSidebar />
         </div>
 
-        <div className="w-full md:w-3/4">
+        <div className="w-full md:w-3/4 h-full">
         <Categories />
         </div>
       </div>

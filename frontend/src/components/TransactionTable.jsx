@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-
 import React, { useEffect, useState } from "react";
-import { IoReorderThreeSharp } from "react-icons/io5";
 import { handleError, handleSuccess } from "../utils/toast";
 import ExpenseModal from "./ExpenseModal";
 import TransactionRow from "./TransactionRow";
+import { FaFilter } from "react-icons/fa";
+
 
 function TransactionTable(props) {
   const {
@@ -29,33 +29,15 @@ function TransactionTable(props) {
     date: "",
   });
 
-  const categories = {
-    income: [
-      "Part-time",
-      "Full-time",
-      "Freelancer",
-      "Salary",
-      "Bonus",
-      "Other",
-    ],
-    expense: [
-      "Rent",
-      "Groceries",
-      "Food",
-      "Medical",
-      "Utilities",
-      "Entertainment",
-      "Transportation",
-      "Other",
-    ],
-  };
-
   const today = new Date().toISOString().split("T")[0];
 
   const [showFilters, setShowFilters] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [updatedData, setUpdatedData] = useState({});
+  const [categories, setCategories] = useState({ income: [], expense: [] });
+  const [transactionType, setTransactionType] = useState("");
+
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
   const tableHeadings = [
     "Title",
@@ -69,7 +51,34 @@ function TransactionTable(props) {
 
   useEffect(() => {
     fetchExpenses();
+    fetchCategories();
   }, [fetchExpenses]);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/categories", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      const result = await response.json();
+      if (Array.isArray(result) && result.length > 0) {
+        const incomeCategories = result
+          .filter((cat) => cat.type === "income")
+          .map((cat) => cat.name);
+        const expenseCategories = result
+          .filter((cat) => cat.type === "expense")
+          .map((cat) => cat.name);
+
+        setCategories({ income: incomeCategories, expense: expenseCategories });
+      } else {
+        handleError(result.message);
+      }
+    } catch (error) {
+      handleError("Failed to fetch categories");
+    }
+  };
 
   const deleteExpense = async (expenseId) => {
     try {
@@ -105,6 +114,7 @@ function TransactionTable(props) {
       filterMonth: "",
       filterTransactionType: "",
     });
+    setTransactionType("");
     fetchExpenses();
   };
 
@@ -218,28 +228,38 @@ function TransactionTable(props) {
     setConfirmDeleteId(null);
   };
 
+  const handleTransactionTypeChange = (e) => {
+    setTransactionType(e.target.value);
+    setFilters({ ...filters, filterTransactionType: e.target.value });
+  };
+
   return (
     <div className="p-4">
       <div className="flex flex-row md:flex-row justify-between items-center mt-6 mb-4">
-        <span className="text-2xl font-bold mb-4 md:mb-0 ml-2 md:ml-10">
+        <div className="text-2xl font-bold mb-4 md:mb-0 ml-2 md:ml-10">
           Expenses:
-        </span>
+        </div>
         <div className="flex justify-end mr-2 md:mr-10">
           <button
             onClick={handleAddClick}
-            className="mr-4 bg-white text-black hover:bg-slate-300 hover:scale-110 px-2 py-1 md:px-3 md:py-2 border-2 rounded-3xl text-sm md:text-base"
+            className="mr-4 bg-white text-black hover:bg-slate-300 hover:scale-110 px-2 py-1 md:px-3 md:py-2 border-2 rounded text-sm md:text-base"
           >
             Add Transaction
           </button>
-          <span className="text-2xl font-bold text-gray-600 mb-4">Filters</span>
           <span
-            className="text-black text-3xl pl-2 mt-1 cursor-pointer"
+            className="text-black text-xl pl-2 pr-4 mt-1 cursor-pointer py-1 hover:scale-125"
             onClick={() => {
               setShowFilters(!showFilters);
             }}
           >
-            <IoReorderThreeSharp />
+            <FaFilter />
           </span>
+          <button
+            // onClick={handleAddClick}
+            className=" bg-blue-500 text-white hover:bg-blue-700 hover:scale-110 px-2 py-1 md:px-3 md:py-2 border-2 rounded text-sm md:text-base"
+          >
+            Export
+          </button>
         </div>
       </div>
 
@@ -250,12 +270,27 @@ function TransactionTable(props) {
             <label className="block text-gray-900">Month</label>
             <input
               type="month"
+              
               value={filters.filterMonth}
               onChange={(e) =>
                 setFilters({ ...filters, filterMonth: e.target.value })
               }
               className="border rounded w-full py-2 px-3"
             />
+            
+          </div>
+
+          <div>
+            <label className="block text-gray-900">Transaction Type</label>
+            <select
+              value={transactionType}
+              onChange={handleTransactionTypeChange}
+              className="border rounded w-full py-2 px-3"
+            >
+              <option value="">All</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
           </div>
 
           <div>
@@ -268,29 +303,19 @@ function TransactionTable(props) {
               className="border rounded w-full py-2 px-3"
             >
               <option value="">All</option>
-              {categories.expense.concat(categories.income).map((cat, index) => (
-                <option key={`${cat}-${index}`} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-gray-900">Transaction Type</label>
-            <select
-              value={filters.filterTransactionType}
-              onChange={(e) =>
-                setFilters({
-                  ...filters,
-                  filterTransactionType: e.target.value,
-                })
-              }
-              className="border rounded w-full py-2 px-3"
-            >
-              <option value="">All</option>
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
+              {transactionType
+                ? categories[transactionType].map((cat, index) => (
+                    <option key={`${cat}-${index}`} value={cat}>
+                      {cat}
+                    </option>
+                  ))
+                : categories.expense
+                    .concat(categories.income)
+                    .map((cat, index) => (
+                      <option key={`${cat}-${index}`} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
             </select>
           </div>
 
@@ -324,11 +349,11 @@ function TransactionTable(props) {
           <tbody>
             {expenses.map((expense) => (
               <TransactionRow
-              key={expense._id}
-              expense={expense}
-              onEditClick={handleEditClick}
-              onDeleteClick={handleDeleteClick}
-            />
+                key={expense._id}
+                expense={expense}
+                onEditClick={handleEditClick}
+                onDeleteClick={handleDeleteClick}
+              />
             ))}
           </tbody>
         </table>

@@ -28,9 +28,9 @@ function ManageCategory() {
 
   const handleAddOrEditCategory = async (e) => {
     e.preventDefault();
-    const url = isEditing 
-        ? `http://localhost:8080/api/categories/${editCategoryId}` 
-        : "http://localhost:8080/api/categories";
+    const url = isEditing
+      ? `http://localhost:8080/api/categories/${editCategoryId}`
+      : "http://localhost:8080/api/categories";
 
     const method = isEditing ? "PUT" : "POST";
 
@@ -62,9 +62,14 @@ function ManageCategory() {
 
   const handleDeleteCategory = async (categoryId) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/categories/${categoryId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/categories/${categoryId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
       const result = await response.json();
       if (result.success) {
         handleSuccess(result.message);
@@ -85,13 +90,17 @@ function ManageCategory() {
           type="text"
           placeholder="Category Name"
           value={newCategory.name}
-          onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+          onChange={(e) =>
+            setNewCategory({ ...newCategory, name: e.target.value })
+          }
           required
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <select
           value={newCategory.type}
-          onChange={(e) => setNewCategory({ ...newCategory, type: e.target.value })}
+          onChange={(e) =>
+            setNewCategory({ ...newCategory, type: e.target.value })
+          }
           className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="income">Income</option>
@@ -107,9 +116,12 @@ function ManageCategory() {
 
       <ul className="space-y-3">
         {categories.map((category) => (
-          <li key={category._id} className="flex justify-between items-center p-3 bg-gray-100 rounded-md shadow-sm">
+          <li
+            key={category._id}
+            className="flex justify-between items-center p-3 bg-gray-100 rounded-md shadow-sm"
+          >
             <div>
-              <span className="font-medium text-gray-800">{category.name}</span> 
+              <span className="font-medium text-gray-800">{category.name}</span>
               <span className="text-gray-500 ml-1">({category.type})</span>
             </div>
             <div className="flex gap-2">

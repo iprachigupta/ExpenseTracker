@@ -70,11 +70,17 @@ const ExpenseModal = ({
                 <option value="" disabled>
                   Choose...
                 </option>
-                {categories[expenseData.transactionType].map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
+                {expenseData.transactionType === "income"
+                  ? categories.income.map((cat, index) => (
+                      <option key={`${cat}-${index}`} value={cat}>
+                        {cat}
+                      </option>
+                    ))
+                  : categories.expense.map((cat, index) => (
+                      <option key={`${cat}-${index}`} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
               </select>
             </div>
           )}
