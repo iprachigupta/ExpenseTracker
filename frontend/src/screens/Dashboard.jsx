@@ -49,7 +49,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center h-screen p-4 md:p-0">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 md:p-0">
         <div className="w-full md:w-1/4 mb-4 md:mb-0">
           <Sidebar />
         </div>

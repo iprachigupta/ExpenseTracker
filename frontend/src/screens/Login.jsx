@@ -40,7 +40,7 @@ function Login() {
       } else if (!success) {
         handleError(message);
       } else if (error) {
-        const details = error?.details[0].message;
+        const details = error?.details?.[0].message;
         handleError(details);
       }
     } catch (error) {

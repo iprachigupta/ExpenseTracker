@@ -15,7 +15,7 @@ function Sidebar() {
   };
 
   return (
-    <div>
+    <div className="fixed">
       <div className="bg-white p-2 shadow-md fixed top-0 left-0 z-50 w-full flex justify-between items-center md:hidden">
         <Logo />
         <button onClick={toggleSidebar} className="text-3xl">
@@ -25,7 +25,7 @@ function Sidebar() {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-screen bg-white w-64 p-6 shadow-xl shadow-slate-500 z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`top-0 left-0 h-screen bg-white w-64 p-6 shadow-xl shadow-slate-500 z-40 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 md:static`}
       >

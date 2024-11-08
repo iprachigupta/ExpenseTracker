@@ -108,8 +108,8 @@ const Settings = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-start items-start h-screen bg-white">
-        <div>
+      <div className="flex flex-col md:flex-row justify-start items-start  bg-white">
+        <div className="w-full md:w-1/4 mb-4 md:mb-0">
           <Sidebar />
         </div>
         <div className="md:ml-52 w-full p-6 sm:p-4 mt-24 md:mt-12">
