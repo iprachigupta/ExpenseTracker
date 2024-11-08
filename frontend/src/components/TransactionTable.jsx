@@ -6,6 +6,9 @@ import ExpenseModal from "./ExpenseModal";
 import TransactionRow from "./TransactionRow";
 import { FaFilter } from "react-icons/fa";
 import ConfirmationModal from "./ConfirmationModal";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import FiltersModal from "./FiltersModal";
 
 function TransactionTable(props) {
   const {
@@ -237,8 +240,52 @@ function TransactionTable(props) {
     setShowExportModal(true);
   };
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const date = new Date().toLocaleDateString();
+
+    doc.setFontSize(20);
+    doc.setFont("Newsreader");
+    doc.text("Transaction History:", 14, 10);
+    doc.setFontSize(10);
+    doc.text(`Exported On: ${date}`, 14, 16);
+
+    const tableHeads = [
+      "Title",
+      "Amount",
+      "Category",
+      "Description",
+      "Type",
+      "Date",
+    ];
+    const tableRows = expenses.map((expense) => [
+      expense.title,
+      expense.amount,
+      expense.category,
+      expense.description,
+      expense.transactionType,
+      expense.date,
+    ]);
+
+    doc.autoTable({
+      head: [tableHeads],
+      body: tableRows,
+      startY: 20,
+      headStyles: {
+        fontStyle: "Newsreader",
+        fontSize: 10,
+        halign: "left",
+      },
+      margin: { top: 20, left: 15 },
+    });
+
+    doc.save("transaction_history.pdf");
+  };
+
   const handleConfirmExport = (e) => {
-    //export ho jayegi pdf and mesgae toast ho jayega
+    generatePDF();
+    handleSuccess("Export Successful");
+    setShowExportModal(false);
   };
 
   const handleCancelExport = (e) => {
@@ -279,13 +326,22 @@ function TransactionTable(props) {
         <ConfirmationModal
           title={"Confirm Export :"}
           ask={"Are you sure you want to export this transaction? "}
+          confirm={"Export"}
           handleConfirm={handleConfirmExport}
           handleCancel={handleCancelExport}
+          filters={filters}
+          setFilters={setFilters}
+          resetFilters={resetFilters}
+          transactionType={transactionType}
+          handleTransactionTypeChange={handleTransactionTypeChange}
+          categories={categories}
+          displayFilter={true}
+          displayResetFilter={false}
         />
       )}
 
       {/* Filters */}
-      {showFilters && (
+      {/* {showFilters && (
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
           <div>
             <label className="block text-gray-900">Month</label>
@@ -321,7 +377,7 @@ function TransactionTable(props) {
               }
               className="border rounded w-full py-2 px-3"
             >
-              <option value="">All</option>
+              <option value="all">All</option>
               {transactionType
                 ? categories[transactionType].map((cat, index) => (
                     <option key={`${cat}-${index}`} value={cat}>
@@ -338,7 +394,6 @@ function TransactionTable(props) {
             </select>
           </div>
 
-          {/* Reset Filters */}
           <div className="text-center">
             <button
               onClick={resetFilters}
@@ -348,6 +403,18 @@ function TransactionTable(props) {
             </button>
           </div>
         </div>
+      )} */}
+
+      {showFilters && (
+        <FiltersModal
+          filters={filters}
+          setFilters={setFilters}
+          resetFilters={resetFilters}
+          transactionType={transactionType}
+          handleTransactionTypeChange={handleTransactionTypeChange}
+          categories={categories}
+          displayResetFilter={true}
+        />
       )}
 
       {/* Expenses Table */}
@@ -410,8 +477,17 @@ function TransactionTable(props) {
         <ConfirmationModal
           title={"Confirm Delete :"}
           ask={"Are you sure you want to delete this transaction? "}
+          confirm={"Confirm"}
           handleConfirm={handleConfirmDelete}
           handleCancel={handleCancelDelete}
+          filters={filters}
+          setFilters={setFilters}
+          resetFilters={resetFilters}
+          transactionType={transactionType}
+          handleTransactionTypeChange={handleTransactionTypeChange}
+          categories={categories}
+          displayFilter={false}
+          displayResetFilter={false}
         />
       )}
     </div>
