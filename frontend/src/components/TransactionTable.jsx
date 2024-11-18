@@ -14,13 +14,10 @@ function TransactionTable(props) {
   const {
     fetchExpenses,
     expenses,
-    setExpenses,
     filters,
     setFilters,
     editExpenseId,
     setEditExpenseId,
-    editData,
-    setEditData,
   } = props;
 
   const [formData, setFormData] = useState({

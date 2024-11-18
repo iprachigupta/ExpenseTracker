@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import { GrTransaction } from "react-icons/gr";
@@ -6,9 +7,11 @@ import { MdOutlineSettings } from "react-icons/md";
 import { FiMenu } from "react-icons/fi";
 import SidebarItem from "./SidebarItem";
 import Logo from "./Logo";
+import { useLogout } from "../contexts/LogoutContext";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { triggerLogoutDialog } = useLogout();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -23,7 +26,6 @@ function Sidebar() {
         </button>
       </div>
 
-      {/* Sidebar */}
       <div
         className={`top-0 left-0 h-screen bg-white w-64 p-6 shadow-xl shadow-slate-500 z-40 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -61,11 +63,13 @@ function Sidebar() {
             />
           </li>
           <li>
-            <SidebarItem
-              icon={<MdOutlineLogin />}
-              title="Log out"
-              route="/logout"
-            />
+            <div
+              className="cursor-pointer p-5  bg-blue-200 shadow-md rounded-2xl flex hover:shadow-xl hover:scale-105 hover:bg-blue-200"
+              onClick={triggerLogoutDialog}
+            >
+              <span className="size-6 mt-1">{<MdOutlineLogin />}</span>
+              <span className="ml-2">Log Out</span>
+            </div>
           </li>
         </ul>
       </div>
