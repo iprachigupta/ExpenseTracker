@@ -73,7 +73,7 @@ const AccountProfile = () => {
   };
 
   return (
-    <div className="w-full max-w-md lg:max-w-2xl lg:mt-20 md:mt-20 h-auto mx-auto bg-gradient-to-r from-blue-300 to-purple-300 shadow-xl rounded-lg p-4 lg:p-8">
+    <div className="w-full max-w-md md:mt-20 lg:mt-20 items-start lg:max-w-3xl h-auto mx-auto bg-gradient-to-r from-blue-300 to-purple-300 shadow-xl rounded-lg p-4 lg:p-8">
       <div className="flex flex-col lg:flex-row items-center lg:space-x-6">
         <div className="relative w-20 h-20 lg:w-28 lg:h-28 rounded-full bg-gradient-to-b from-purple-500 to-blue-500 flex items-center justify-center shadow-lg">
           <span className="text-3xl lg:text-4xl font-bold text-white">

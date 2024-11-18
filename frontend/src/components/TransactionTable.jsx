@@ -279,8 +279,36 @@ function TransactionTable(props) {
     doc.save("transaction_history.pdf");
   };
 
+  const exportToCSV = () => {
+    const tableHeads = ["Title", "Amount", "Category", "Description", "Type", "Date"];
+  
+    const tableRows = expenses.map((expense) => [
+      expense.title,
+      expense.amount,
+      expense.category,
+      expense.description,
+      expense.transactionType,
+      expense.date,
+    ]);
+  
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [tableHeads.join(","), ...tableRows.map((row) => row.join(","))].join("\n");
+  
+    const encodedUri = encodeURI(csvContent);
+    const csv = document.createElement("a");
+    csv.setAttribute("href", encodedUri);
+    csv.setAttribute("download", "transaction_history.csv");
+    document.body.appendChild(csv);
+
+    csv.click();
+    
+    document.body.removeChild(csv);
+  };
+  
   const handleConfirmExport = (e) => {
-    generatePDF();
+    // generatePDF();
+    exportToCSV();
     handleSuccess("Export Successful");
     setShowExportModal(false);
   };
