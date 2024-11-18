@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
 import React from "react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { handleError } from "../utils/toast";
 import TransactionTable from "./TransactionTable";
-// import TransactionTabl from "./TT";
+
 
 function Expense() {
   const [expenses, setExpenses] = useState([]);
@@ -25,6 +25,7 @@ function Expense() {
   });
 
   const fetchExpenses = useCallback(async () => {
+    console.log("called")
     const { filterMonth, filterCategory, filterTransactionType } = filters;
     const queryParams = new URLSearchParams();
     if (filterMonth) {
@@ -46,8 +47,9 @@ function Expense() {
         }
       );
 
+      
       const result = await response.json();
-
+      
       if (result.success) {
         setExpenses(result.expenses);
       } else {
@@ -57,10 +59,6 @@ function Expense() {
       handleError(error);
     }
   }, [filters]);
-
-  useEffect(() => {
-    fetchExpenses();
-  }, [fetchExpenses]);
 
   return (
     <div className="absolute mt-24 lg:mt-0 lg:left-64 right-0 lg:right-0 lg:mx-auto lg:p-4">

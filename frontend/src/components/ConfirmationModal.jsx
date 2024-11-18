@@ -20,11 +20,12 @@ function ConfirmationModal({
 }) {
   return (
     <div>
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" >
         <div className="bg-white p-4 md:p-5 rounded shadow-lg w-11/12 md:w-full max-w-md">
-          <h2 className="text-lg md:text-xl font-bold mb-4">{title}</h2>
+          <h2 className="text-lg md:text-xl font-bold mb-6">{title}</h2>
           {displayFilter && (
             <FiltersModal
+              isConfirmModal={true}
               filters={filters}
               setFilters={setFilters}
               resetFilters={resetFilters}
@@ -34,8 +35,8 @@ function ConfirmationModal({
               displayResetFilter={displayResetFilter}
             />
           )}
-          <p className="text-sm md:text-base">{ask}</p>
-          <div className="flex justify-end mt-4">
+          <p className="text-lg md:text-lg">{ask}</p>
+          <div className="flex justify-end mt-6">
             <button
               onClick={handleCancel}
               className="bg-gray-300 text-black px-4 py-2 rounded hover:scale-110 hover:bg-gray-400"

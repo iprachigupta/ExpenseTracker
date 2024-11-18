@@ -55,7 +55,7 @@ function TransactionTable(props) {
   useEffect(() => {
     fetchExpenses();
     fetchCategories();
-  }, [fetchExpenses]);
+  }, [fetchExpenses, filters]);
 
   const fetchCategories = async () => {
     try {
@@ -67,6 +67,7 @@ function TransactionTable(props) {
 
       const result = await response.json();
       if (Array.isArray(result) && result.length > 0) {
+        //update this code for one and more than 1 transaction types. It will be dynamic
         const incomeCategories = result
           .filter((cat) => cat.type === "income")
           .map((cat) => cat.name);
@@ -118,7 +119,6 @@ function TransactionTable(props) {
       filterTransactionType: "",
     });
     setTransactionType("");
-    fetchExpenses();
   };
 
   const handleEditClick = (expense) => {
@@ -341,69 +341,6 @@ function TransactionTable(props) {
       )}
 
       {/* Filters */}
-      {/* {showFilters && (
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-          <div>
-            <label className="block text-gray-900">Month</label>
-            <input
-              type="month"
-              value={filters.filterMonth}
-              onChange={(e) =>
-                setFilters({ ...filters, filterMonth: e.target.value })
-              }
-              className="border rounded w-full py-2 px-3"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-900">Transaction Type</label>
-            <select
-              value={transactionType}
-              onChange={handleTransactionTypeChange}
-              className="border rounded w-full py-2 px-3"
-            >
-              <option value="">All</option>
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-gray-900">Category</label>
-            <select
-              value={filters.filterCategory}
-              onChange={(e) =>
-                setFilters({ ...filters, filterCategory: e.target.value })
-              }
-              className="border rounded w-full py-2 px-3"
-            >
-              <option value="all">All</option>
-              {transactionType
-                ? categories[transactionType].map((cat, index) => (
-                    <option key={`${cat}-${index}`} value={cat}>
-                      {cat}
-                    </option>
-                  ))
-                : categories.expense
-                    .concat(categories.income)
-                    .map((cat, index) => (
-                      <option key={`${cat}-${index}`} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-            </select>
-          </div>
-
-          <div className="text-center">
-            <button
-              onClick={resetFilters}
-              className="mt-6 bg-red-500 hover:bg-red-700 text-white p-2 rounded-lg w-full"
-            >
-              Reset Filters
-            </button>
-          </div>
-        </div>
-      )} */}
 
       {showFilters && (
         <FiltersModal
@@ -475,6 +412,7 @@ function TransactionTable(props) {
       {/* Confirmation Dialog */}
       {confirmDeleteId && (
         <ConfirmationModal
+          isConfirmModal={false}
           title={"Confirm Delete :"}
           ask={"Are you sure you want to delete this transaction? "}
           confirm={"Confirm"}
