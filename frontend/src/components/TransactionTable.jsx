@@ -292,7 +292,7 @@ function TransactionTable(props) {
   return (
     <div className="p-4">
       <div className="flex flex-row md:flex-row justify-between items-center mt-6 mb-4">
-        <div className="text-2xl font-bold mb-4 md:mb-0 ml-2 md:ml-10">
+        <div className="text-2xl font-bold mb-4 md:mb-0 ">
           Expenses:
         </div>
         <div className="flex justify-end mr-2 md:mr-10">
