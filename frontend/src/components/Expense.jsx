@@ -25,7 +25,6 @@ function Expense() {
   });
 
   const fetchExpenses = useCallback(async () => {
-    console.log("called")
     const { filterMonth, filterCategory, filterTransactionType } = filters;
     const queryParams = new URLSearchParams();
     if (filterMonth) {

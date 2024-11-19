@@ -14,6 +14,8 @@ function FiltersModal(props) {
     displayResetFilter,
   } = props;
 
+  console.log(categories)
+
   const classModify = `mt-4 grid grid-cols-1 sm:grid-cols-2 ${
     isConfirmModal ? "md:grid-cols-3" : "md:grid-cols-4"
   } gap-4 mb-4`;

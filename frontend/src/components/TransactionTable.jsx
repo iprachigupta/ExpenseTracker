@@ -35,7 +35,7 @@ function TransactionTable(props) {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [updatedData, setUpdatedData] = useState({});
-  const [categories, setCategories] = useState({ income: [], expense: [] });
+  const [categories, setCategories] = useState({});
   const [transactionType, setTransactionType] = useState("");
   const [showExportModal, setShowExportModal] = useState(false);
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
@@ -54,6 +54,10 @@ function TransactionTable(props) {
     fetchCategories();
   }, [fetchExpenses, filters]);
 
+  // useEffect(() => {
+  //   console.log(categories); 
+  // }, [categories]);
+
   const fetchCategories = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/categories", {
@@ -63,23 +67,17 @@ function TransactionTable(props) {
       });
 
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
       if (Array.isArray(result) && result.length > 0) {
         //update this code for one and more than 1 transaction types. It will be dynamic
-        // const incomeCategories = result
-        //   .filter((cat) => cat.type === "income")
-        //   .map((cat) => cat.name);
-        // const expenseCategories = result
-        //   .filter((cat) => cat.type === "expense")
-        //   .map((cat) => cat.name);
-        const groupedCategories = result.reduce((acc, category)=>{
-          const {type, name} = category;
+        const groupedCategories = result.reduce((acc, categ)=>{
+          const {type, name} = categ;
           if(!acc[type]){
             acc[type] = [];
           }
           acc[type].push(name);
           return acc;
-        }) 
+        },{}) 
 
         setCategories(groupedCategories);
       } else {
@@ -443,6 +441,7 @@ function TransactionTable(props) {
           setExpenseData={setFormData}
           saveExpense={addExpense}
           setShowExpenseModal={setShowAddExpenseModal}
+          transactionType = {transactionType}
           categories={categories}
           today={today}
           save={"Add"}
@@ -457,6 +456,7 @@ function TransactionTable(props) {
           setExpenseData={setUpdatedData}
           saveExpense={handleUpdateExpense}
           setShowExpenseModal={setShowUpdateModal}
+          transactionType = {transactionType}
           categories={categories}
           save={"Update"}
         />

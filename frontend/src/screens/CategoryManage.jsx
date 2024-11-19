@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import AdminSidebar from "../components/AdminSidebar";
 import Categories from '../components/Categories';
 
-function AdminDashboard() {
+function CategoryManage() {
   return (
     <>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center h-screen p-4 md:p-0">
@@ -32,4 +32,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default CategoryManage;
