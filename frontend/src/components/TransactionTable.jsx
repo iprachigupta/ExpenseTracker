@@ -63,16 +63,25 @@ function TransactionTable(props) {
       });
 
       const result = await response.json();
+      console.log(result);
       if (Array.isArray(result) && result.length > 0) {
         //update this code for one and more than 1 transaction types. It will be dynamic
-        const incomeCategories = result
-          .filter((cat) => cat.type === "income")
-          .map((cat) => cat.name);
-        const expenseCategories = result
-          .filter((cat) => cat.type === "expense")
-          .map((cat) => cat.name);
+        // const incomeCategories = result
+        //   .filter((cat) => cat.type === "income")
+        //   .map((cat) => cat.name);
+        // const expenseCategories = result
+        //   .filter((cat) => cat.type === "expense")
+        //   .map((cat) => cat.name);
+        const groupedCategories = result.reduce((acc, category)=>{
+          const {type, name} = category;
+          if(!acc[type]){
+            acc[type] = [];
+          }
+          acc[type].push(name);
+          return acc;
+        }) 
 
-        setCategories({ income: incomeCategories, expense: expenseCategories });
+        setCategories(groupedCategories);
       } else {
         handleError(result.message);
       }
@@ -237,6 +246,8 @@ function TransactionTable(props) {
     setShowExportModal(true);
   };
 
+  const [exportType, setExportType] = useState("csv");
+
   const generatePDF = () => {
     const doc = new jsPDF();
     const date = new Date().toLocaleDateString();
@@ -280,8 +291,15 @@ function TransactionTable(props) {
   };
 
   const exportToCSV = () => {
-    const tableHeads = ["Title", "Amount", "Category", "Description", "Type", "Date"];
-  
+    const tableHeads = [
+      "Title",
+      "Amount",
+      "Category",
+      "Description",
+      "Type",
+      "Date",
+    ];
+
     const tableRows = expenses.map((expense) => [
       expense.title,
       expense.amount,
@@ -290,11 +308,13 @@ function TransactionTable(props) {
       expense.transactionType,
       expense.date,
     ]);
-  
+
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      [tableHeads.join(","), ...tableRows.map((row) => row.join(","))].join("\n");
-  
+      [tableHeads.join(","), ...tableRows.map((row) => row.join(","))].join(
+        "\n"
+      );
+
     const encodedUri = encodeURI(csvContent);
     const csv = document.createElement("a");
     csv.setAttribute("href", encodedUri);
@@ -302,13 +322,20 @@ function TransactionTable(props) {
     document.body.appendChild(csv);
 
     csv.click();
-    
+
     document.body.removeChild(csv);
   };
-  
+
+  const handleConfirmExportPdf = (e) => {
+    setExportType("pdf");
+  };
+
+  const handleConfirmExportCsv = (e) => {
+    setExportType("csv");
+  };
+
   const handleConfirmExport = (e) => {
-    // generatePDF();
-    exportToCSV();
+    exportType === "pdf" ? generatePDF() : exportToCSV();
     handleSuccess("Export Successful");
     setShowExportModal(false);
   };
@@ -320,9 +347,7 @@ function TransactionTable(props) {
   return (
     <div className="p-4">
       <div className="flex flex-row md:flex-row justify-between items-center mt-6 mb-4">
-        <div className="text-2xl font-bold mb-4 md:mb-0 ">
-          Expenses:
-        </div>
+        <div className="text-2xl font-bold mb-4 md:mb-0 ">Expenses:</div>
         <div className="flex justify-end mr-2 md:mr-10">
           <button
             onClick={handleAddClick}
@@ -352,7 +377,10 @@ function TransactionTable(props) {
           title={"Confirm Export :"}
           ask={"Are you sure you want to export this transaction? "}
           confirm={"Export"}
+          exportConfirm={true}
           handleConfirm={handleConfirmExport}
+          handleConfirmPdf={handleConfirmExportPdf}
+          handleConfirmCsv={handleConfirmExportCsv}
           handleCancel={handleCancelExport}
           filters={filters}
           setFilters={setFilters}
@@ -437,10 +465,10 @@ function TransactionTable(props) {
       {/* Confirmation Dialog */}
       {confirmDeleteId && (
         <ConfirmationModal
-          isConfirmModal={false}
           title={"Confirm Delete :"}
           ask={"Are you sure you want to delete this transaction? "}
           confirm={"Confirm"}
+          exportConfirm={false}
           handleConfirm={handleConfirmDelete}
           handleCancel={handleCancelDelete}
           filters={filters}
