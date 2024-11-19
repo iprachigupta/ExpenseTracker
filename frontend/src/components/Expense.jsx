@@ -25,6 +25,7 @@ function Expense() {
   });
 
   const fetchExpenses = useCallback(async () => {
+    // console.log("called")
     const { filterMonth, filterCategory, filterTransactionType } = filters;
     const queryParams = new URLSearchParams();
     if (filterMonth) {
@@ -45,12 +46,13 @@ function Expense() {
           credentials: "include",
         }
       );
-
       
       const result = await response.json();
-      
+      const expenseData = result.expenses;
+
       if (result.success) {
-        setExpenses(result.expenses);
+        expenseData.reverse();
+        setExpenses(expenseData);
       } else {
         handleError(result.message);
       }
