@@ -14,6 +14,8 @@ function FiltersModal(props) {
     displayResetFilter,
   } = props;
 
+  console.log(transactionType)
+
   const classModify = `mt-4 grid grid-cols-1 sm:grid-cols-2 ${
     isConfirmModal ? "md:grid-cols-3" : "md:grid-cols-4"
   } gap-4 mb-4`;
@@ -40,8 +42,14 @@ function FiltersModal(props) {
             className="box-border m-auto h-10 border rounded w-full py-2 px-3"
           >
             <option value="">All</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+            {
+              Object.keys(categories)?.map((category,idx)=>(
+                <option value={category} key={idx}>{category}</option>
+              )
+              )
+            }
+            {/* <option value="income">Income</option>
+            <option value="expense">Expense</option> */}
           </select>
         </div>
 

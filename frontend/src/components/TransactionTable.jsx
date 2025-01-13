@@ -36,6 +36,7 @@ function TransactionTable(props) {
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [updatedData, setUpdatedData] = useState({});
   const [categories, setCategories] = useState({});
+  console.log("🚀 ~ TransactionTable ~ categories:", categories, Object.keys(categories))
   const [transactionType, setTransactionType] = useState("");
   const [showExportModal, setShowExportModal] = useState(false);
   const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
